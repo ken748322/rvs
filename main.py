@@ -19,6 +19,7 @@ def main(num):
     score = []
 
     # screening
+    i = 0
     for ligand in data_list["ligand_name"]:
         source = func.init_pcd(data_dir_pass + ligand + ".ply")
 
@@ -27,19 +28,40 @@ def main(num):
 
         # scoring
         score.append(scoring.scoring(source, target))
+        # score.append(docking.docking(target, source).inlier_rmse)
+
+        """
+        # save pose 
+        address = "result/target"+str(num)+"/withligand"+str(i)+".ply"
+        two_pcd = source.pcd_full_points + target.pcd_full_points
+        o3d.io.write_point_cloud(address, two_pcd)
+        i = i + 1
+        """
 
     return np.argsort(np.array(score))
 
 
-if __name__ == "__main__":
+def virtual_screening():
 
     target_num = [i for i in range(38)]
 
     c = 0
+    total = 0
     for num in target_num:
         checker = main(num)
         print(num, ":", checker[:10])
         if num in checker[:10]:
             c = c + 1
+        total = total + 1
+        print(num, ":", checker[:10], c/total)
+
+def test():
+    target_num = 3
+
+    checker = main(target_num)
+    print(target_num, ":", checker[:10])
     
-    print(c/38)
+
+if __name__ == "__main__":
+    main()
+
