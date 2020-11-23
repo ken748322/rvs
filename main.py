@@ -1,28 +1,35 @@
 import open3d as o3d
-from docking import *
-from scoring import * 
+import docking 
+import scoring 
 import func
 import json
+import numpy as np
 
 
 data_list_file = "dud38_list.json"
 data_dir_pass = "../../data/dud38_ply/"
 
-with open(data_list_file, "r") as f:
-    data_list = json.load(f)
 
-target = func.init_pcd(data_dir_pass + data_list["pdb_name"][35] + ".ply")
+def main(num):
+    with open(data_list_file, "r") as f:
+        data_list = json.load(f)
 
-score = []
+    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][num] + ".ply")
 
-# screening
-for ligand in data_list["ligand_name"]:
-    source = func.init_pcd(data_dir_pass + ligand + ".ply")
+    score = []
 
-    # docking
-    docking(target, source)
+    # screening
+    for ligand in data_list["ligand_name"]:
+        source = func.init_pcd(data_dir_pass + ligand + ".ply")
 
-    # scoring
-    score.append(scoring(source, target))
+        # docking
+        docking.docking(target, source)
 
-print(np.argsort(np.array(score)))
+        # scoring
+        score.append(scoring.scoring(source, target))
+
+    return np.argsort(np.array(score))
+
+
+if __name__ == "__main__":
+    print(main(13))

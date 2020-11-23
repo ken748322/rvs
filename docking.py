@@ -53,7 +53,7 @@ def docking(target, source):
     source.transform(result.transformation)
 
     # local registration
-    result = func.icp(source, target, 3)
+    result = func.icp(source, target, 2)
     source.transform(result.transformation)
     
 
