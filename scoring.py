@@ -8,7 +8,7 @@ import json
 def scoring(source, target):
     """compute the squared error with the nearest neighbor in the target of the source
     """
-    error = np.average(source.pcd_full_points.compute_point_cloud_distance(target.pcd_full_points))
+    error = np.average(source.pcd.compute_point_cloud_distance(target.pcd))
     return error
 
 

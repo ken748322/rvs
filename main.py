@@ -32,4 +32,14 @@ def main(num):
 
 
 if __name__ == "__main__":
-    print(main(13))
+
+    target_num = [i for i in range(38)]
+
+    c = 0
+    for num in target_num:
+        checker = main(num)
+        print(num, ":", checker[:10])
+        if num in checker[:10]:
+            c = c + 1
+    
+    print(c/38)
