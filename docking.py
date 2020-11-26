@@ -57,6 +57,7 @@ def docking(target, source):
     # source.transform(result.transformation)
 
     return result
+
     
 
 
@@ -67,8 +68,8 @@ if __name__ == "__main__":
         data_list = json.load(f)
     
     target = func.init_pcd(data_dir_pass + data_list["pdb_name"][3] + ".ply")
-    for i in range(38):
-        source = func.init_pcd(data_dir_pass + data_list["ligand_name"][0] + ".ply")
+    for i in range(5):
+        source = func.init_pcd(data_dir_pass + data_list["ligand_name"][i] + ".ply")
 
         trans_init = [[1.0, 0.0, 0.0, 0.0],
                     [0.0, 1.0, 0.0, 0.0],
@@ -78,14 +79,13 @@ if __name__ == "__main__":
         target.transform(trans_init)
 
         # docking
-        print(docking(target, source))
+        corr = docking(target, source)
+        print(np.asarray(corr.correspondence_set).shape)
 
         # visualization 
-        o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
-
-
-        # save pose 
+        # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+        
+        # save pose
         address = "result/target3/"+"ligand"+str(i)+".ply"
         two_pcd = source.pcd_full_points + target.pcd_full_points
         o3d.io.write_point_cloud(address, two_pcd)
-
