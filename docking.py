@@ -26,8 +26,8 @@ def docking(target, source):
     target.invert_normal()
     source.estimate_normal(voxel_size*2, 30, True)
 
-    target.calculate_fpfh(voxel_size*8, 500)
-    source.calculate_fpfh(voxel_size*8, 500)
+    target.calculate_fpfh(voxel_size*8, 750)
+    source.calculate_fpfh(voxel_size*8, 750)
 
     # top-n fpfh matching
     corr = np.array([], dtype=np.int).reshape(0,2)
@@ -47,14 +47,14 @@ def docking(target, source):
         voxel_size * 3, 
         o3d.registration.TransformationEstimationPointToPoint(),
         4,
-        o3d.registration.RANSACConvergenceCriteria(10000000, 100000)) 
+        o3d.registration.RANSACConvergenceCriteria(20000000, 200000)) 
     
     # global registration done 
     source.transform(result.transformation)
 
     # local registration
-    result = func.icp(source, target, 2)
-    source.transform(result.transformation)
+    # result = func.icp(source, target, 3)
+    # source.transform(result.transformation)
 
     return result
     
@@ -65,22 +65,27 @@ if __name__ == "__main__":
     # prepare data set
     with open(data_list_file, "r") as f:
         data_list = json.load(f)
+    
+    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][3] + ".ply")
+    for i in range(38):
+        source = func.init_pcd(data_dir_pass + data_list["ligand_name"][0] + ".ply")
 
-    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][15] + ".ply")
-    source = func.init_pcd(data_dir_pass + data_list["ligand_name"][15] + ".ply")
+        trans_init = [[1.0, 0.0, 0.0, 0.0],
+                    [0.0, 1.0, 0.0, 0.0],
+                    [0.0, 0.0, 1.0, 0.0],
+                    [0.0, 0.0, 0.0, 1.0]]
 
-    trans_init = [[1.0, 0.0, 0.0, 0.0],
-                [0.0, 1.0, 0.0, 0.0],
-                [0.0, 0.0, 1.0, 0.0],
-                [0.0, 0.0, 0.0, 1.0]]
+        target.transform(trans_init)
 
-    target.transform(trans_init)
+        # docking
+        print(docking(target, source))
 
-    # docking
-    docking(target, source)
-
-    # visualization 
-    o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+        # visualization 
+        o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
 
 
+        # save pose 
+        address = "result/target3/"+"ligand"+str(i)+".ply"
+        two_pcd = source.pcd_full_points + target.pcd_full_points
+        o3d.io.write_point_cloud(address, two_pcd)
 
