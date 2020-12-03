@@ -53,8 +53,8 @@ def docking(target, source):
     source.transform(result.transformation)
 
     # local registration
-    # result = func.icp(source, target, 3)
-    # source.transform(result.transformation)
+    result = func.icp(source, target, 1.5)
+    source.transform(result.transformation)
 
     return result
 
@@ -67,25 +67,33 @@ if __name__ == "__main__":
     with open(data_list_file, "r") as f:
         data_list = json.load(f)
     
-    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][3] + ".ply")
-    for i in range(5):
-        source = func.init_pcd(data_dir_pass + data_list["ligand_name"][i] + ".ply")
+    
 
-        trans_init = [[1.0, 0.0, 0.0, 0.0],
+   
+
+    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][3] + ".ply")
+    trans_init = [[1.0, 0.0, 0.0, 15.0],
                     [0.0, 1.0, 0.0, 0.0],
                     [0.0, 0.0, 1.0, 0.0],
                     [0.0, 0.0, 0.0, 1.0]]
+    target.transform(trans_init)
+    source = func.init_pcd(data_dir_pass + data_list["ligand_name"][3] + ".ply")
+    
+    # visualization 
+    o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
 
-        target.transform(trans_init)
 
-        # docking
-        corr = docking(target, source)
-        print(np.asarray(corr.correspondence_set).shape)
+    # docking
+    result = docking(target, source)
+    print(np.asarray(result.correspondence_set).shape[0]/len(source.pcd.points))
+    print()
 
-        # visualization 
-        # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
-        
-        # save pose
-        address = "result/target3/"+"ligand"+str(i)+".ply"
-        two_pcd = source.pcd_full_points + target.pcd_full_points
-        o3d.io.write_point_cloud(address, two_pcd)
+    # visualization 
+    o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+    
+    """
+    # save pose
+    address = "result/target3/"+"ligand"+str(i)+".ply"
+    two_pcd = source.pcd_full_points + target.pcd_full_points
+    o3d.io.write_point_cloud(address, two_pcd)
+    """
