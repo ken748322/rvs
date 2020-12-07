@@ -13,8 +13,9 @@ def which_points_inside_source(source, target):
     s_points = np.asarray(source.pcd.points)
     t_points = np.asarray(target.pcd.points)
 
-    # リガンドを0.5ずつ分割する
-    cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.2)]
+    # リガンドを分割する
+    # voxel_size/2 で分割
+    cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.5/2)]
 
     # 内外判定
     points_inside_idx = []
@@ -64,12 +65,6 @@ def which_points_inside_source(source, target):
 def scoring(source, target):
     """compute the squared error with the nearest neighbor in the target of the source
     """
-    # down sample し直す
-    source.reset_down_sample()
-    target.reset_down_sample()
-    voxel_size = 0.2
-    source.down_sample(voxel_size)
-    target.down_sample(voxel_size)
 
     # source の最近傍点の二乗誤差の平均
     error = np.average(source.pcd.compute_point_cloud_distance(target.pcd))
@@ -83,7 +78,7 @@ def scoring(source, target):
 
     # source内にあるtargetに重みをつける
     inside_error = np.asarray(tmp_pcd.compute_point_cloud_distance(source.pcd))
-    error = error + np.average(inside_error[list(inside_error > 0.2)]) * 10
+    error = error + np.average(inside_error[list(inside_error > 0.2)]) * 10 
 
     return error
 

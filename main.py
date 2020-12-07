@@ -49,7 +49,6 @@ def virtual_screening():
     total = 0
     for num in target_num:
         checker = main(num)
-        print(num, ":", checker[:10])
         if num in checker[:10]:
             c = c + 1
         total = total + 1
