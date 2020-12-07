@@ -26,8 +26,8 @@ def docking(target, source):
     target.invert_normal()
     source.estimate_normal(voxel_size*2, 30, True)
 
-    target.calculate_fpfh(voxel_size*4, 750)
-    source.calculate_fpfh(voxel_size*4, 750)
+    target.calculate_fpfh(voxel_size*6, 750)
+    source.calculate_fpfh(voxel_size*6, 750)
 
     # top-n fpfh matching
     corr = np.array([], dtype=np.int).reshape(0,2)
@@ -44,7 +44,7 @@ def docking(target, source):
         source.pcd, 
         target.pcd,
         corr, 
-        voxel_size * 3, 
+        voxel_size * 4, 
         o3d.registration.TransformationEstimationPointToPoint(),
         4,
         o3d.registration.RANSACConvergenceCriteria(20000000, 200000)) 
@@ -53,8 +53,8 @@ def docking(target, source):
     source.transform(result.transformation)
 
     # local registration
-    # result = func.icp(source, target, 1.5)
-    # source.transform(result.transformation)
+    result = func.icp(source, target, 1.5)
+    source.transform(result.transformation)
 
     return result
 
@@ -71,13 +71,13 @@ if __name__ == "__main__":
 
    
 
-    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][2] + ".ply")
-    trans_init = [[1.0, 0.0, 0.0, 0.0],
+    target = func.init_pcd(data_dir_pass + data_list["pdb_name"][3] + ".ply")
+    trans_init = [[1.0, 0.0, 0.0, 15.0],
                     [0.0, 1.0, 0.0, 0.0],
                     [0.0, 0.0, 1.0, 0.0],
                     [0.0, 0.0, 0.0, 1.0]]
     target.transform(trans_init)
-    source = func.init_pcd(data_dir_pass + data_list["ligand_name"][2] + ".ply")
+    source = func.init_pcd(data_dir_pass + data_list["ligand_name"][3] + ".ply")
     
     # visualization 
     # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
