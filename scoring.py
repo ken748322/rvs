@@ -10,12 +10,12 @@ from shapely.geometry import Point
 def which_points_inside_source(source, target):
 
     # point-cloudsをnp.arrayに変更
-    s_points = np.asarray(source.pcd.points)
-    t_points = np.asarray(target.pcd.points)
+    s_points = np.asarray(source.pcd_full_points.points)
+    t_points = np.asarray(target.pcd_full_points.points)
 
     # リガンドを分割する
     # voxel_size/2 で分割
-    cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.5/2)]
+    cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.1/2)]
 
     # 内外判定
     points_inside_idx = []
@@ -70,7 +70,7 @@ def scoring(source, target):
     error = np.average(source.pcd.compute_point_cloud_distance(target.pcd))
 
     # souce 内にあるtargetの点を抽出
-    idx, points_inside = which_points_inside_source(source, target)
+    _, points_inside = which_points_inside_source(source, target)
 
     # tmp = source内部にあるtargetの点
     tmp_pcd = o3d.geometry.PointCloud()

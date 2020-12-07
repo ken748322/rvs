@@ -11,6 +11,7 @@ class init_pcd:
     def __init__(self, file_pass):
         self.pcd = o3d.io.read_point_cloud(file_pass)
         self.pcd_full_points = copy.deepcopy(self.pcd)
+        self.pcd_full_points = self.pcd_full_points.voxel_down_sample(0.1)
 
     def down_sample(self, voxel_size):
         self.pcd = self.pcd.voxel_down_sample(voxel_size)

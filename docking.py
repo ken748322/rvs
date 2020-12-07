@@ -26,15 +26,15 @@ def docking(target, source):
     target.invert_normal()
     source.estimate_normal(voxel_size*2, 30, True)
 
-    target.calculate_fpfh(voxel_size*6, 750)
-    source.calculate_fpfh(voxel_size*6, 750)
+    target.calculate_fpfh(voxel_size*8, 750)
+    source.calculate_fpfh(voxel_size*8, 750)
 
     # top-n fpfh matching
     corr = np.array([], dtype=np.int).reshape(0,2)
     source_search_idxs = sample(range(len(source.pcd.points)), k=(len(source.pcd.points)//100)*50)
 
     for source_idx in source_search_idxs:
-        corr_indexs, clustered_points = func.one_point_matching(source, target, source_idx)
+        corr_indexs, _ = func.one_point_matching(source, target, source_idx)
         corr = np.append(corr, corr_indexs, axis=0)
 
     corr = o3d.utility.Vector2iVector(corr) 

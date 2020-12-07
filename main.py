@@ -45,14 +45,18 @@ def virtual_screening():
 
     target_num = [i for i in range(38)]
 
-    c = 0
+    top10 = 0
+    top5 = 0
     total = 0
     for num in target_num:
         checker = main(num)
         if num in checker[:10]:
-            c = c + 1
+            top10 = top10 + 1
+        if num in checker[:5]:
+            top5 = top5 + 1
         total = total + 1
-        print(num, ":", checker[:10], c/total)
+        print(num, ":", checker[:10])
+        print("top10:", top10/total, "top5:", top5/total)
 
 def test():
     target_num = 3
