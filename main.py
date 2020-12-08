@@ -49,9 +49,9 @@ def main(num):
     # screening
     # data in "decoy"
     for ligands in decoy_list["decoy"]:
-        for ligand in ligands:
+        for ligand in ligands["ligand"]:
             # load ligand data
-            source = func.init_pcd(data_dir_pass + ligand + ".ply")
+            source = func.init_pcd(data_dir_pass + "decoy/" + ligand + ".ply")
             # docking
             docking.docking(target, source)
             # scoring
@@ -80,7 +80,7 @@ def virtual_screening():
         print("time:", time.time()-start_time)
 
 def test():
-    target_num = 3
+    target_num = 23
 
     checker = main(target_num)
     print(target_num, ":", checker[:10])
@@ -89,5 +89,5 @@ def test():
     
 
 if __name__ == "__main__":
-    virtual_screening()
+    test()
 
