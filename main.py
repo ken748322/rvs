@@ -4,6 +4,7 @@ import scoring
 import func
 import json
 import numpy as np
+import time
 
 
 data_list_file = "dud38_list.json"
@@ -11,14 +12,21 @@ data_dir_pass = "../../data/dud38_ply/"
 
 
 def main(num):
+    """num: is target(protein pocket) number 
+    """
+    # read dud38_list
     with open(data_list_file, "r") as f:
         data_list = json.load(f)
+    # read decoy_list
+    with open("decoy_list.json", "r") as f:
+        decoy_list = json.load(f)
 
     target = func.init_pcd(data_dir_pass + data_list["pdb_name"][num] + ".ply")
 
     score = []
 
     # screening
+    # data in "dud38"
     i = 0
     for ligand in data_list["ligand_name"]:
         source = func.init_pcd(data_dir_pass + ligand + ".ply")
@@ -29,6 +37,8 @@ def main(num):
         # scoring
         score.append(scoring.scoring(source, target))
         # score.append(docking.docking(target, source).inlier_rmse)
+    
+    
 
         """
         # save pose 
@@ -45,15 +55,20 @@ def virtual_screening():
 
     target_num = [i for i in range(38)]
 
-    c = 0
+    top10 = 0
+    top5 = 0
     total = 0
+    start_time = time.time()
     for num in target_num:
         checker = main(num)
-        print(num, ":", checker[:10])
         if num in checker[:10]:
-            c = c + 1
+            top10 = top10 + 1
+        if num in checker[:5]:
+            top5 = top5 + 1
         total = total + 1
-        print(num, ":", checker[:10], c/total)
+        print(num, ":", checker[:10])
+        print("top10:", top10/total, "top5:", top5/total)
+        print("time:", time.time()-start_time)
 
 def test():
     target_num = 3
