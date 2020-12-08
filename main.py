@@ -7,27 +7,25 @@ import numpy as np
 import time
 
 
-data_list_file = "dud38_list.json"
+# dataset pass
 data_dir_pass = "../../data/dud38_ply/"
+# read dud38_list
+with open("dud38_list.json", "r") as f:
+    data_list = json.load(f)
+# read decoy_list
+with open("decoy_list.json", "r") as f:
+    decoy_list = json.load(f)
 
 
 def main(num):
     """num: is target(protein pocket) number 
     """
-    # read dud38_list
-    with open(data_list_file, "r") as f:
-        data_list = json.load(f)
-    # read decoy_list
-    with open("decoy_list.json", "r") as f:
-        decoy_list = json.load(f)
-
     target = func.init_pcd(data_dir_pass + data_list["pdb_name"][num] + ".ply")
 
     score = []
 
     # screening
     # data in "dud38"
-    i = 0
     for ligand in data_list["ligand_name"]:
         source = func.init_pcd(data_dir_pass + ligand + ".ply")
 
@@ -47,6 +45,17 @@ def main(num):
         o3d.io.write_point_cloud(address, two_pcd)
         i = i + 1
         """
+
+    # screening
+    # data in "decoy"
+    for ligands in decoy_list["decoy"]:
+        for ligand in ligands:
+            # load ligand data
+            source = func.init_pcd(data_dir_pass + ligand + ".ply")
+            # docking
+            docking.docking(target, source)
+            # scoring
+            score.append(scoring.scoring(source, target))
 
     return np.argsort(np.array(score))
 
@@ -75,6 +84,8 @@ def test():
 
     checker = main(target_num)
     print(target_num, ":", checker[:10])
+    if target_num in checker[:10]:
+        print("top10: finded")
     
 
 if __name__ == "__main__":
