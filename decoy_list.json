@@ -1,0 +1,137 @@
+{
+	"decoy": [
+		{
+			"pdb": "2fsz",
+			"ligand": ["OHT"]
+		}, {
+			"pdb": "1w7x", 
+			"ligand": ["413"]
+		}, {
+			"pdb": "2nnq", 
+			"ligand": ["T4B"]
+		}, {
+			"pdb": "3bz3",
+			"ligand": ["YAM"]
+		}, {
+			"pdb": "1j4h", 
+			"ligand": ["SUB"]
+		}, {
+			"pdb": "3e37", 
+			"ligand": ["ED5"]
+		}, {
+			"pdb": "1zw5",
+			"ligand": ["ZOL"]
+		}, {
+			"pdb": "2v3f", 
+			"ligand": ["BTB"]
+		}, {
+			"pdb": "3kgc", 
+			"ligand": ["ZK1", "LY7", "GLU"]
+		}, {
+			"pdb": "1vso", 
+			"ligand": ["AT1", "GOL"]
+		}, {
+			"pdb": "3max", 
+			"ligand": ["LLX", "NHE"]
+		}, {
+			"pdb": "3f07", 
+			"ligand": ["AGE"]
+		}, {
+			"pdb": "3nf7", 
+			"ligand": ["CIW"]
+		}, {
+			"pdb": "3f9m",
+			"ligand": ["MRK", "GLC"]
+		}, {
+			"pdb": "2oj9", 
+			"ligand": ["BMI"]
+		}, {
+			"pdb": "2ica",
+			"ligand": ["2IC"]
+		}, {
+			"pdb": "3lpb", 
+			"ligand": ["NVB"]
+		}, {
+			"pdb": "3cjo", 
+			"ligand": ["K30", "ADP"]
+		}, {
+			"pdb": "3g0e", 
+			"ligand": ["B49"]
+		}, {
+			"pdb": "2i0e", 
+			"ligand": ["PDS"]
+		}, {
+			"pdb": "2of2", 
+			"ligand": ["547"]
+		}, {
+			"pdb": "3chp", 
+			"ligand": ["4BO"]
+		}, {
+			"pdb": "3m2w", 
+			"ligand": ["L8I"]
+		}, {
+			"pdb": "3lq8", 
+			"ligand": ["88Z"]
+		}, {
+			"pdb": "2ojg", 
+			"ligand": ["19A"]
+		}, {
+			"pdb": "2zdt",
+			"ligand": ["46C"]
+		}, {
+			"pdb": "830c", 
+			"ligand": ["RS1"]
+		}, {
+			"pdb": "3eqh", 
+			"ligand": ["ADP", "5BM"]
+		}, {
+			"pdb": "1qw6", 
+			"ligand": ["HEM", "H4B", "3AR"]
+		}, {
+			"pdb": "1kvo", 
+			"ligand": ["OAP"]
+		}, {
+			"pdb": "2owb", 
+			"ligand": ["626"]
+		}, {
+			"pdb": "2p54", 
+			"ligand": ["735"]
+		}, {
+			"pdb": "2znp", 
+			"ligand": ["K55", "B7G"]
+		}, {
+			"pdb": "2azr", 
+			"ligand": ["982"]
+		}, {
+			"pdb": "1d3g", 
+			"ligand": ["FMN", "BRE", "DDQ", "ORO"]
+		}, {
+			"pdb": "3g6z", 
+			"ligand": ["A7T", "NAG"]
+		}, {
+			"pdb": "2etr", 
+			"ligand": ["Y27"]
+		}, {
+			"pdb": "3hmm", 
+			"ligand": ["855"]
+		}, {
+			"pdb": "1q4x", 
+			"ligand": ["G24"]
+		}, {
+			"pdb": "2zec", 
+			"ligand": ["11N"]
+		}, {
+			"pdb": "1syn", 
+			"ligand": ["F89", "UMP"]
+		}, {
+			"pdb": "1sqt", 
+			"ligand": ["UI3"]
+		}, {
+			"pdb": "3biz", 
+			"ligand": ["61E"]
+		}, {
+			"pdb": "3hl5", 
+			"ligand": ["9JZ"]
+		}
+	]
+}

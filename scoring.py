@@ -15,7 +15,7 @@ def which_points_inside_source(source, target):
 
     # リガンドを分割する
     # voxel_size/2 で分割
-    cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.1/2)]
+    cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.2)]
 
     # 内外判定
     points_inside_idx = []
@@ -67,7 +67,7 @@ def scoring(source, target):
     """
 
     # source の最近傍点の二乗誤差の平均
-    error = np.average(source.pcd.compute_point_cloud_distance(target.pcd))
+    error = np.average(source.pcd_full_points.compute_point_cloud_distance(target.pcd_full_points))
 
     # souce 内にあるtargetの点を抽出
     _, points_inside = which_points_inside_source(source, target)
@@ -95,17 +95,14 @@ if __name__ == "__main__":
     target = func.init_pcd(data_dir_pass + data_list["pdb_name"][3] + ".ply")
     source = func.init_pcd(data_dir_pass + data_list["ligand_name"][3] + ".ply")
 
-    trans_init = [[1.0, 0.0, 0.0, 0.0],
+    trans_init = [[1.0, 0.0, 0.0, 10.0],
                 [0.0, 1.0, 0.0, 0.0],
                 [0.0, 0.0, 1.0, 0.0],
                 [0.0, 0.0, 0.0, 1.0]]
 
     target.transform(trans_init)
 
-    # down sampling
-    voxel_size = 0.8
-    source.down_sample(voxel_size)
-    target.down_sample(voxel_size)
+    
 
     # visualization 
     # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])

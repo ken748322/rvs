@@ -26,8 +26,8 @@ def docking(target, source):
     target.invert_normal()
     source.estimate_normal(voxel_size*2, 30, True)
 
-    target.calculate_fpfh(voxel_size*8, 750)
-    source.calculate_fpfh(voxel_size*8, 750)
+    target.calculate_fpfh(6.0, 750)
+    source.calculate_fpfh(6.0, 750)
 
     # top-n fpfh matching
     corr = np.array([], dtype=np.int).reshape(0,2)
@@ -44,7 +44,7 @@ def docking(target, source):
         source.pcd, 
         target.pcd,
         corr, 
-        voxel_size * 4, 
+        2.0, # voxel_size * 4
         o3d.registration.TransformationEstimationPointToPoint(),
         4,
         o3d.registration.RANSACConvergenceCriteria(20000000, 200000)) 
@@ -87,11 +87,8 @@ if __name__ == "__main__":
     result = docking(target, source)
 
     # visualization 
-    o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
-    
-    """
+    # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+
     # save pose
-    address = "result/target3/"+"ligand"+str(i)+".ply"
-    two_pcd = source.pcd_full_points + target.pcd_full_points
-    o3d.io.write_point_cloud(address, two_pcd)
-    """
+    func.save_pose(source, target, "out/pocket3_ligand3.ply")
+   
