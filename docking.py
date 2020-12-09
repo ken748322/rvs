@@ -14,7 +14,7 @@ def docking(target, source):
     """
 
     # compute feature 
-    voxel_size = 0.5
+    voxel_size = 0.8
 
     source.down_sample(voxel_size)
     target.down_sample(voxel_size)

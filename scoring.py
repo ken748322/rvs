@@ -77,7 +77,7 @@ def scoring(source, target):
     tmp_pcd.points = o3d.utility.Vector3dVector(points_inside)
 
     # source内にあるtargetに重みをつける
-    inside_error = np.asarray(tmp_pcd.compute_point_cloud_distance(source.pcd))
+    inside_error = np.asarray(tmp_pcd.compute_point_cloud_distance(source.pcd_full_points))
     error = error + np.average(inside_error[list(inside_error > 0.2)]) * 10 
 
     return error
@@ -101,7 +101,7 @@ if __name__ == "__main__":
                 [0.0, 0.0, 0.0, 1.0]]
 
     target.transform(trans_init)
-
+    print(scoring(source, target))
     
 
     # visualization 
