@@ -10,8 +10,8 @@ from shapely.geometry import Point
 def which_points_inside_source(source, target):
 
     # point-cloudsをnp.arrayに変更
-    s_points = np.asarray(source.pcd.points)
-    t_points = np.asarray(target.pcd.points)
+    s_points = np.asarray(source.pcd_full_points.points)
+    t_points = np.asarray(target.pcd_full_points.points)
 
     # リガンドを0.5ずつ分割する
     cut_surface = [i for i in np.arange(s_points[:,2].max(), s_points[:,2].min(), -0.2)]
@@ -64,15 +64,9 @@ def which_points_inside_source(source, target):
 def scoring(source, target):
     """compute the squared error with the nearest neighbor in the target of the source
     """
-    # down sample し直す
-    source.reset_down_sample()
-    target.reset_down_sample()
-    voxel_size = 0.2
-    source.down_sample(voxel_size)
-    target.down_sample(voxel_size)
 
     # source の最近傍点の二乗誤差の平均
-    error = np.average(source.pcd.compute_point_cloud_distance(target.pcd))
+    error = np.average(source.pcd_full_points.compute_point_cloud_distance(target.pcd_full_points))
 
     # souce 内にあるtargetの点を抽出
     idx, points_inside = which_points_inside_source(source, target)
@@ -82,7 +76,7 @@ def scoring(source, target):
     tmp_pcd.points = o3d.utility.Vector3dVector(points_inside)
 
     # source内にあるtargetに重みをつける
-    inside_error = np.asarray(tmp_pcd.compute_point_cloud_distance(source.pcd))
+    inside_error = np.asarray(tmp_pcd.compute_point_cloud_distance(source.pcd_full_points))
     error = error + np.average(inside_error[list(inside_error > 0.2)]) * 10
 
     return error
@@ -107,10 +101,7 @@ if __name__ == "__main__":
 
     target.transform(trans_init)
 
-    # down sampling
-    voxel_size = 0.8
-    source.down_sample(voxel_size)
-    target.down_sample(voxel_size)
+    print(scoring(source, target))
 
     # visualization 
     # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])

@@ -10,7 +10,7 @@ import copy
 class init_pcd:
     def __init__(self, file_pass):
         self.pcd = o3d.io.read_point_cloud(file_pass)
-        self.pcd_full_points = copy.deepcopy(self.pcd)
+        self.pcd_full_points = self.pcd.voxel_down_sample(0.2)
 
     def down_sample(self, voxel_size):
         self.pcd = self.pcd.voxel_down_sample(voxel_size)
@@ -197,3 +197,12 @@ def one_point_matching(source, target, source_idx):
     return corr_indexs.T, clustered_points
 
 
+def save_pose(source, target, filename):
+    """This is the function to save source and target pose to .ply file
+    Args:
+        source (init_pcd): Pocket's point clouds
+        target (init_pcd): Ligand's point clouds
+        filename (str): file address + file name
+    """
+    two_pcd = source.pcd_full_points + target.pcd_full_points
+    o3d.io.write_point_cloud(filename, two_pcd)
