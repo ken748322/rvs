@@ -63,7 +63,8 @@ class init_pcd:
                   'pink': [0.91, 0.65, 0.82],
                   'gray': [0.68, 0.68, 0.68]}
         
-        self.pcd.colors[index] = COLORS[color]
+        for i in index:
+            self.pcd.colors[i] = COLORS[color]
 
     def transform(self, trans_matrix):
         self.pcd.transform(trans_matrix)

@@ -14,7 +14,7 @@ def docking(target, source):
     """
 
     # compute feature 
-    voxel_size = 0.8
+    voxel_size = 0.4
 
     source.down_sample(voxel_size)
     target.down_sample(voxel_size)
@@ -26,12 +26,12 @@ def docking(target, source):
     target.invert_normal()
     source.estimate_normal(voxel_size*2, 30, True)
 
-    target.calculate_fpfh(voxel_size*8, 750)
-    source.calculate_fpfh(voxel_size*8, 750)
+    target.calculate_fpfh(6.0, 750)
+    source.calculate_fpfh(6.0, 750)
 
     # top-n fpfh matching
     corr = np.array([], dtype=np.int).reshape(0,2)
-    source_search_idxs = sample(range(len(source.pcd.points)), k=(len(source.pcd.points)//100)*100)
+    source_search_idxs = sample(range(len(source.pcd.points)), k=(len(source.pcd.points)//100)*50)
 
     for source_idx in source_search_idxs:
         corr_indexs, clustered_points = func.one_point_matching(source, target, source_idx)
@@ -44,7 +44,7 @@ def docking(target, source):
         source.pcd, 
         target.pcd,
         corr, 
-        voxel_size * 3, 
+        2.5, 
         o3d.registration.TransformationEstimationPointToPoint(),
         4,
         o3d.registration.RANSACConvergenceCriteria(20000000, 200000)) 
@@ -58,8 +58,6 @@ def docking(target, source):
 
     return result
 
-    
-
 
 if __name__ == "__main__":
 
@@ -68,24 +66,51 @@ if __name__ == "__main__":
         data_list = json.load(f)
     
 
-    for i in range(38):
+    def test_groundtruth():
+        """ポケット38個とそれぞれの正解リガンドとのポーズ推定
+        """
+        for i in range(38):
+            target = func.init_pcd(data_dir_pass + data_list["pdb_name"][i] + ".ply")
+            trans_init = [[1.0, 0.0, 0.0, 15.0],
+                            [0.0, 1.0, 0.0, 0.0],
+                            [0.0, 0.0, 1.0, 0.0],
+                            [0.0, 0.0, 0.0, 1.0]]
+            target.transform(trans_init)
+            source = func.init_pcd(data_dir_pass + data_list["ligand_name"][i] + ".ply")
+            
+            # visualization 
+            # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+
+
+            # docking
+            docking(target, source)
+
+            # save to .ply file
+            # func.save_pose(source, target, "out/pocket{0}_ligand{0}.ply".format(i))
+
+            # visualization 
+            # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+            
+
+    def test_one(i):
+        """ポケットとリガンド1対1のポーズ推定
+        """
         target = func.init_pcd(data_dir_pass + data_list["pdb_name"][i] + ".ply")
+        source = func.init_pcd(data_dir_pass + data_list["ligand_name"][i] + ".ply")
+
+        # visualization 
+        # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+
         trans_init = [[1.0, 0.0, 0.0, 15.0],
                         [0.0, 1.0, 0.0, 0.0],
                         [0.0, 0.0, 1.0, 0.0],
                         [0.0, 0.0, 0.0, 1.0]]
         target.transform(trans_init)
-        source = func.init_pcd(data_dir_pass + data_list["ligand_name"][i] + ".ply")
-        
-        # visualization 
-        # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
 
-
-        # docking
         docking(target, source)
 
-        func.save_pose(source, target, "out/pocket{0}_ligand{0}.ply".format(i))
-
         # visualization 
-        # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
-        
+        o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
+
+
+    test_one(1)
