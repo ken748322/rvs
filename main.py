@@ -48,6 +48,7 @@ def main(num):
 
     # screening
     # data in "decoy"
+    """
     for ligands in decoy_list["decoy"]:
         for ligand in ligands["ligand"]:
             # load ligand data
@@ -58,6 +59,7 @@ def main(num):
             score.append(scoring.scoring(source, target))
 
     return np.argsort(np.array(score))
+    """
 
 
 def virtual_screening():

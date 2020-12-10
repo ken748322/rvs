@@ -14,7 +14,7 @@ def docking(target, source):
     """
 
     # compute feature 
-    voxel_size = 0.8
+    voxel_size = 0.5
 
     source.down_sample(voxel_size)
     target.down_sample(voxel_size)
@@ -26,8 +26,8 @@ def docking(target, source):
     target.invert_normal()
     source.estimate_normal(voxel_size*2, 30, True)
 
-    target.calculate_fpfh(voxel_size*8, 750)
-    source.calculate_fpfh(voxel_size*8, 750)
+    target.calculate_fpfh(5.0, 750)
+    source.calculate_fpfh(5.0, 750)
 
     # top-n fpfh matching
     corr = np.array([], dtype=np.int).reshape(0,2)
@@ -44,7 +44,7 @@ def docking(target, source):
         source.pcd, 
         target.pcd,
         corr, 
-        voxel_size * 3, 
+        0.5, 
         o3d.registration.TransformationEstimationPointToPoint(),
         4,
         o3d.registration.RANSACConvergenceCriteria(20000000, 200000)) 
