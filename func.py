@@ -180,11 +180,14 @@ def matched_feature_clustering(points):
     return clustered_points, index
 
 
-def one_point_matching(source, target, source_idx):
+def one_point_matching(source, target, source_idx, topn):
     """
     inputs are func.init_pcd
     """
-    matched_points, matched_index = fpfh_matching_top_n(source.pcd, target.pcd, source.pcd_fpfh, target.pcd_fpfh, source_idx, 20)
+    matched_points, matched_index = fpfh_matching_top_n(source.pcd, target.pcd,
+                                                        source.pcd_fpfh,
+                                                        target.pcd_fpfh,
+                                                        source_idx, topn)
 
     # line_set = set_lines(matched_points)
 

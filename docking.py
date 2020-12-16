@@ -5,7 +5,8 @@ import numpy as np
 from random import sample
 
 data_list_file = "dud38_list.json"
-data_dir_pass = "../../data/dud38_ply/"
+data_dir_pass = "../../data/dud38/"
+
 
 def docking(target, source):
     """
@@ -13,7 +14,7 @@ def docking(target, source):
     target&source's type is func.init_pcd
     """
 
-    # compute feature 
+    # compute feature
     voxel_size = 0.4
 
     source.down_sample(voxel_size)
@@ -22,9 +23,9 @@ def docking(target, source):
     source.change_all_color(color="blue", which_pcd=2)
     target.change_all_color(color="yellow", which_pcd=2)
 
-    target.estimate_normal(voxel_size*2, 30, True)
+    target.estimate_normal(voxel_size * 2, 30, True)
     target.invert_normal()
-    source.estimate_normal(voxel_size*2, 30, True)
+    source.estimate_normal(voxel_size * 2, 30, True)
 
     target.calculate_fpfh(6.0, 750)
     source.calculate_fpfh(6.0, 750)
@@ -98,7 +99,7 @@ if __name__ == "__main__":
         target = func.init_pcd(data_dir_pass + data_list["pdb_name"][i] + ".ply")
         source = func.init_pcd(data_dir_pass + data_list["ligand_name"][i] + ".ply")
 
-        # visualization 
+        # visualization
         # o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
 
         trans_init = [[1.0, 0.0, 0.0, 15.0],
@@ -109,7 +110,7 @@ if __name__ == "__main__":
 
         docking(target, source)
 
-        # visualization 
+        # visualization
         o3d.visualization.draw_geometries([source.pcd_full_points, target.pcd_full_points])
 
 
