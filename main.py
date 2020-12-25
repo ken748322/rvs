@@ -35,18 +35,9 @@ def main(num):
         # scoring
         score.append(scoring.scoring(source, target))
         # score.append(docking.docking(target, source).inlier_rmse)
-    
-    
 
-        """
-        # save pose 
-        address = "result/target"+str(num)+"/withligand"+str(i)+".ply"
-        two_pcd = source.pcd_full_points + target.pcd_full_points
-        o3d.io.write_point_cloud(address, two_pcd)
-        i = i + 1
-        """
 
-    # screening
+    """# screening
     # data in "decoy"
     for ligands in decoy_list["decoy"]:
         for ligand in ligands["ligand"]:
@@ -57,7 +48,7 @@ def main(num):
             # scoring
             score.append(scoring.scoring(source, target))
 
-    return np.argsort(np.array(score))
+    return np.argsort(np.array(score))"""
 
 
 def virtual_screening():
@@ -89,5 +80,5 @@ def test():
     
 
 if __name__ == "__main__":
-    test()
+    virtual_screening()
 
