@@ -33,8 +33,6 @@ def docking(target, source):
         corr_indexs, _ = func.one_point_matching(source, target, source_idx)
         corr = np.append(corr, corr_indexs, axis=0)
 
-    corr = o3d.utility.Vector2iVector(corr) 
-
     # registration
     criteria = ransac.RANSACConvergenceCriteria(3000000, 0.999)
     result = ransac.RegistrationRANSACBasedOnCorrespondence(source.pcd, target.pcd, corr, 1.5, 4, criteria)
