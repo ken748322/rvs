@@ -1,6 +1,4 @@
-import open3d as o3d
-import func
-import ransac
+from utils import func, ransac
 import numpy as np
 
 
