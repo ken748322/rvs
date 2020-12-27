@@ -1,7 +1,4 @@
-import open3d as o3d
-import docking 
-import scoring 
-import func
+from utils import docking, scoring, func
 import json
 import numpy as np
 import time
@@ -10,10 +7,10 @@ import time
 # dataset pass
 data_dir_pass = "../../data/dud38_ply/"
 # read dud38_list
-with open("dud38_list.json", "r") as f:
+with open("data/dud38_list.json", "r") as f:
     data_list = json.load(f)
 # read decoy_list
-with open("decoy_list.json", "r") as f:
+with open("data/decoy_list.json", "r") as f:
     decoy_list = json.load(f)
 
 
@@ -46,14 +43,14 @@ def main(num):
             # docking
             docking.docking(target, source)
             # scoring
-            score.append(scoring.scoring(source, target))
+            score.append(scoring.scoring(source, target))"""
 
-    return np.argsort(np.array(score))"""
+    return np.argsort(np.array(score))
 
 
 def virtual_screening():
 
-    target_num = [i for i in range(38)]
+    target_num = [i for i in range(10)]
 
     top10 = 0
     top5 = 0

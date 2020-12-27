@@ -116,5 +116,5 @@ def RegistrationRANSACBasedOnCorrespondence(
             if exit_itr_local > exit_itr:
                 exit_itr = exit_itr_local
 
-    print(exit_itr, best_result_local.fitness, best_result_local.inlier_rmse)
+    # print(exit_itr, best_result_local.fitness, best_result_local.inlier_rmse)
     return best_result
