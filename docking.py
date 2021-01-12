@@ -14,7 +14,7 @@ def docking(target, source):
     """
 
     # compute feature 
-    voxel_size = 0.8
+    voxel_size = 0.1
 
     source.down_sample(voxel_size)
     target.down_sample(voxel_size)
@@ -22,38 +22,30 @@ def docking(target, source):
     source.change_all_color(color="blue", which_pcd=2)
     target.change_all_color(color="yellow", which_pcd=2)
 
-    target.estimate_normal(voxel_size*2, 30, True)
+    target.estimate_normal(3.1, 30, True)
     target.invert_normal()
-    source.estimate_normal(voxel_size*2, 30, True)
+    source.estimate_normal(3.1, 30, True)
 
-    target.calculate_fpfh(voxel_size*8, 750)
-    source.calculate_fpfh(voxel_size*8, 750)
-
-    # top-n fpfh matching
-    corr = np.array([], dtype=np.int).reshape(0,2)
-    source_search_idxs = sample(range(len(source.pcd.points)), k=(len(source.pcd.points)//100)*100)
-
-    for source_idx in source_search_idxs:
-        corr_indexs, clustered_points = func.one_point_matching(source, target, source_idx)
-        corr = np.append(corr, corr_indexs, axis=0)
-
-    corr = o3d.utility.Vector2iVector(corr) 
+    target.calculate_fpfh(3.1, 135)
+    source.calculate_fpfh(3.1, 135)
 
     # registration
-    result = o3d.registration.registration_ransac_based_on_correspondence(
+    result = o3d.registration.registration_ransac_based_on_feature_matching(
         source.pcd, 
         target.pcd,
-        corr, 
-        voxel_size * 3, 
+        source.pcd_fpfh,
+        target.pcd_fpfh,
+        1.5, 
         o3d.registration.TransformationEstimationPointToPoint(),
         4,
-        o3d.registration.RANSACConvergenceCriteria(20000000, 200000)) 
+        [o3d.registration.CorrespondenceCheckerBasedOnEdgeLength()],
+        o3d.registration.RANSACConvergenceCriteria(4000000, 500)) 
     
     # global registration done 
     source.transform(result.transformation)
 
     # local registration
-    result = func.icp(source, target, 1.5)
+    result = func.icp(source, target, 3.0)
     source.transform(result.transformation)
 
     return result
